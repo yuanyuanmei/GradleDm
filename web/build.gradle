@@ -1,0 +1,7 @@
+group 'com.example'
+archivesBaseName = "web"
+
+dependencies{
+    //依赖common模块
+    compile project(":account")
+}

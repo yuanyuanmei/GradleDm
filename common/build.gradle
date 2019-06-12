@@ -1,0 +1,13 @@
+group 'com.example'
+archivesBaseName = "common"
+
+dependencies{
+    compile(
+            "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatisSpringVersion",
+            "org.freemarker:freemarker:$freemarkerVersion",
+            "com.alibaba:fastjson:$fastJsonVersion",
+            "org.apache.shiro:shiro-all:$shiroVersion",
+            "org.hibernate:hibernate-validator:$validatorVersion",
+            "com.github.pagehelper:pagehelper:$pagehelperVersion"
+    )
+}

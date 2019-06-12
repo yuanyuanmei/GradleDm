@@ -1,0 +1,51 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
+    id 'java'
+}
+
+subprojects{
+
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    configurations {
+        developmentOnly
+        runtimeClasspath {
+            extendsFrom developmentOnly
+        }
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    group = 'com.example'
+    version = '0.0.1-SNAPSHOT'
+    //JVM版本要求
+    sourceCompatibility = '1.8'
+
+    // java编译的时候缺省状态下会因为中文字符而失败
+    [compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        mavenCentral()
+    }
+
+
+
+    //api或compile关键字引用的包对于其他module来说是可见的，而implementation关键字引用的包对于其他module来说是不可见的。
+    dependencies {
+        compile (
+                "org.springframework.boot:spring-boot-starter:$springBootVersion",
+                "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
+                "org.projectlombok:lombok:$lombokVersion"
+        )
+        developmentOnly 'org.springframework.boot:spring-boot-devtools:2.1.5.RELEASE'
+        runtimeOnly "mysql:mysql-connector-java:$mysqlVersion"
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+        testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    }
+
+}
+
