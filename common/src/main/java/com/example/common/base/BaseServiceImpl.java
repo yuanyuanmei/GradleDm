@@ -1,6 +1,8 @@
 package com.example.common.base;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.common.dto.PageDto;
+import com.example.common.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,33 +18,33 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     private BaseDao<T> baseDao;
 
     @Override
-    public T selectByPrimaryKey(Long id){
-        return baseDao.selectByPrimaryKey(id);
+    public JSONObject selectByPrimaryKey(Long id){
+        return StringUtils.formatSuccessJson(baseDao.selectByPrimaryKey(id));
     }
 
     @Override
-    public PageInfo<T> pageList(PageDto pageDto) {
+    public JSONObject pageList(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPageNum(),pageDto.getPageSize());
         List<T> list = baseDao.list();
-        return new PageInfo<>(list);
+        return StringUtils.formatSuccessJson(new PageInfo<>(list));
     }
 
     @Transactional
     @Override
-    public int delete(Integer id){
-        return baseDao.delete(id);
+    public JSONObject delete(Long id){
+        return StringUtils.formatSuccessJson("删除成功！",baseDao.delete(id));
     }
 
     @Transactional
     @Override
-    public int insert(T t){
-        return baseDao.insert(t);
+    public JSONObject insert(T t){
+        return StringUtils.formatSuccessJson("新增成功！",baseDao.insert(t));
     }
 
     @Transactional
     @Override
-    public int update(T t){
-        return baseDao.update(t);
+    public JSONObject update(T t){
+        return StringUtils.formatSuccessJson("修改成功！",baseDao.update(t));
     }
 
 }
