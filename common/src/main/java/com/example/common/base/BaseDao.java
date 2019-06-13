@@ -20,7 +20,7 @@ public interface BaseDao<T> {
      * @param id
      * @return
      */
-    int delete(Integer id);
+    int delete(Long id);
 
     /**
      * 单表新增
