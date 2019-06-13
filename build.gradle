@@ -15,10 +15,10 @@ subprojects{
     apply plugin: 'idea'
 
     configurations {
-        developmentOnly
-        runtimeClasspath {
-            extendsFrom developmentOnly
-        }
+//        developmentOnly
+//        runtimeClasspath {
+//            extendsFrom developmentOnly
+//        }
         compileOnly {
             extendsFrom annotationProcessor
         }

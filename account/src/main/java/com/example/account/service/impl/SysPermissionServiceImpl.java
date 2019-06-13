@@ -1,11 +1,13 @@
 package com.example.account.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.account.beans.SysPermissionBean;
 import com.example.account.dao.SysPermissionDao;
 import com.example.account.service.SysPermissionService;
 import com.example.common.base.BaseServiceImpl;
 import com.example.common.dto.PageDto;
 import com.example.account.enums.EnumPermsType;
+import com.example.common.util.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,13 @@ public class SysPermissionServiceImpl extends BaseServiceImpl<SysPermissionBean>
 
     
     @Override
-    public PageInfo<SysPermissionBean> pageList(PageDto pageDto) {
+    public JSONObject pageList(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPageNum(),pageDto.getPageSize());
         List<SysPermissionBean> list = permsDao.list();
         list.forEach(item -> {
             item.setTypeName(EnumPermsType.keyOf(item.getType()));
         });
-        return new PageInfo<>(list);
+        return StringUtils.formatSuccessJson(new PageInfo<>(list));
     }
 
     @Override
