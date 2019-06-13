@@ -3,6 +3,7 @@ package com.example.account.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.account.beans.UserAccountBean;
 import com.example.account.service.UserAccountService;
+import com.example.common.annotations.ValidateCustom;
 import com.example.common.constants.ApiFuncConsts;
 import com.example.common.constants.ApiModuleConsts;
 import com.example.common.util.StringUtils;
@@ -34,7 +35,9 @@ public class UserAccountController {
         UsernamePasswordToken token = new UsernamePasswordToken(paramBean.getAccount(),paramBean.getPassword(),"");
         try {
             //执行认证操作.
+            System.out.println("AAAAAAAAAA");
             subject.login(token);
+            System.out.println("AAAAAAAAAA");
             //设置过期时间
             subject.getSession().setTimeout(2*60*60*1000);
             return StringUtils.formatSuccessJson("登录成功");
@@ -47,7 +50,7 @@ public class UserAccountController {
     }
 
     //注册验证
-    @ResponseBody
+    @ValidateCustom(UserAccountBean.class)
     @PostMapping(ApiFuncConsts.REIGISTER)
     public JSONObject register(UserAccountBean paramBean) {
         return accountService.save(paramBean);
@@ -58,7 +61,7 @@ public class UserAccountController {
     public JSONObject logout(){
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        return null;
+        return StringUtils.formatSuccessJson("登出成功！");
     }
 
 }
