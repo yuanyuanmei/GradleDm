@@ -1,7 +1,9 @@
 package com.example.common.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.common.constants.ApiCodeConsts;
+import com.example.common.enums.EnumCode;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 
@@ -47,6 +49,9 @@ public class StringUtils {
         return String.valueOf(new SimpleHash(MD5, code, ByteSource.Util.bytes(salt), encryNum));
     }
 
+    private static Object convertToJson(Object data) {
+        return !(data instanceof JSONObject) && !(data instanceof JSONArray) ? JSON.toJSON(data) : data;
+    }
     /**
      * 自定义JSON数据
      */
@@ -55,7 +60,7 @@ public class StringUtils {
         jsonObject.put("code",code);
         jsonObject.put("msg",msg);
         if(Objects.nonNull(info)){
-            jsonObject.put("info",info);
+            jsonObject.put("info",convertToJson(info));
         }
         return jsonObject;
     }
@@ -69,10 +74,10 @@ public class StringUtils {
      */
     public static JSONObject formatSuccessJson(String msg,Object info){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", ApiCodeConsts.success);
+        jsonObject.put("code", EnumCode.SUCCESS.getKey());
         jsonObject.put("msg",msg);
         if(Objects.nonNull(info)){
-            jsonObject.put("info",info);
+            jsonObject.put("info", convertToJson(info));
         }
         return jsonObject;
     }
@@ -81,15 +86,19 @@ public class StringUtils {
         return StringUtils.formatSuccessJson(msg,null);
     }
 
+    public static JSONObject formatSuccessJson(Object info){
+        return StringUtils.formatSuccessJson(EnumCode.SUCCESS.getValue(),convertToJson(info));
+    }
+
     /**
      * 失败JSON数据
      */
     public static JSONObject formatFailJson(String msg,Object info){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", ApiCodeConsts.fail);
+        jsonObject.put("code", EnumCode.FAIL.getKey());
         jsonObject.put("msg",msg);
         if(Objects.nonNull(info)){
-            jsonObject.put("info",info);
+            jsonObject.put("info",convertToJson(info));
         }
         return jsonObject;
     }
@@ -98,4 +107,7 @@ public class StringUtils {
         return StringUtils.formatFailJson(msg,null);
     }
 
+    public static JSONObject formatFailJson(Object info){
+        return StringUtils.formatSuccessJson(EnumCode.FAIL.getValue(),convertToJson(info));
+    }
 }
