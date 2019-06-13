@@ -1,17 +1,18 @@
 package com.example.common.base;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.common.dto.PageDto;
 import com.github.pagehelper.PageInfo;
 
 public interface BaseService<T> {
 
-    PageInfo<T> pageList(PageDto pageDto);
+    JSONObject pageList(PageDto pageDto);
 
-    T selectByPrimaryKey(Long id);
+    JSONObject selectByPrimaryKey(Long id);
 
-    int delete(Integer id);
+    JSONObject delete(Long id);
 
-    int insert(T t);
+    JSONObject insert(T t);
 
-    int update(T t);
+    JSONObject update(T t);
 }
