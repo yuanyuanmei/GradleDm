@@ -26,6 +26,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public JSONObject save(UserAccountBean paramBean){
         int result = 0;
+        String msg = "";
         //根据帐号查找是否存在
         if(Objects.nonNull(accountDao.findByAccount(paramBean.getAccount()))){
             return StringUtils.formatFailJson("账号已存在");
@@ -37,7 +38,7 @@ public class UserAccountServiceImpl implements UserAccountService {
             //新增用户基础表
             baseDao.insert(baseBean);
             //获取usr_id
-            paramBean.setUserId((Long) baseBean.getId());
+            paramBean.setUserId(baseBean.getId());
             //密码加盐,md5加密
             String salt = StringUtils.getItemID(4);
             paramBean.setSalt(salt);
@@ -45,11 +46,13 @@ public class UserAccountServiceImpl implements UserAccountService {
             paramBean.setPassword(StringUtils.md5(paramBean.getPassword(),salt));
             //新增用户帐号表
             result = accountDao.insert(paramBean);
+            msg = "新增成功";
         }else{
             result = accountDao.update(paramBean);
+            msg = "更新成功";
         }
         if(result > 0){
-            return StringUtils.formatSuccessJson("更新成功",paramBean);
+            return StringUtils.formatSuccessJson(msg,paramBean);
         }
         return StringUtils.formatFailJson("更新失败");
     }
