@@ -1,7 +1,6 @@
-group 'com.example'
 archivesBaseName = "account"
 
 dependencies{
     //依赖common模块
-    compile project(":com.example.common")
+    compile project(":common")
 }
