@@ -4,8 +4,5 @@ pluginManagement {
     }
 }
 rootProject.name = 'dm'
-include 'com.example.common'
-include 'account'
-include 'web'
-include 'common'
+include 'account','web','common'
 
