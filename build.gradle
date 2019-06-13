@@ -15,10 +15,10 @@ subprojects{
     apply plugin: 'idea'
 
     configurations {
-//        developmentOnly
-//        runtimeClasspath {
-//            extendsFrom developmentOnly
-//        }
+        developmentOnly
+        runtimeClasspath {
+            extendsFrom developmentOnly
+        }
         compileOnly {
             extendsFrom annotationProcessor
         }
@@ -45,7 +45,7 @@ subprojects{
                 "org.springframework.boot:spring-boot-starter-web:$springBootVersion",
                 "org.projectlombok:lombok:$lombokVersion"
         )
-        developmentOnly 'org.springframework.boot:spring-boot-devtools:2.1.5.RELEASE'
+        developmentOnly "org.springframework.boot:spring-boot-devtools:$springBootVersion"
         runtimeOnly "mysql:mysql-connector-java:$mysqlVersion"
         annotationProcessor "org.projectlombok:lombok:$lombokVersion"
         testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"

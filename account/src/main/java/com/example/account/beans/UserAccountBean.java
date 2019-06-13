@@ -23,12 +23,12 @@ public class UserAccountBean extends BaseEntity {
         /**
         * 账号
         */
-        @NotBlank(message = "账号不能为空")
+        @NotNull(message = "账号不能为空")
         private String account;
         /**
          * 帐号类型 1.普通账号 2.手机帐号 3,邮箱帐号
          */
-        @NotNull(message = "帐号类型不能为空")
+        //@NotNull(message = "帐号类型不能为空")
         private Integer type;
         /**
         * 明文密码
@@ -37,7 +37,7 @@ public class UserAccountBean extends BaseEntity {
         /**
         * 密码
         */
-        @NotBlank(message = "密码不能为空")
+        @NotNull(message = "密码不能为空")
         private String password;
         /**
         * 盐值

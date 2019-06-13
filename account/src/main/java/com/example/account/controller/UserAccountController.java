@@ -28,6 +28,7 @@ public class UserAccountController {
 
     //登录验证
 
+    @ValidateCustom(UserAccountBean.class)
     @PostMapping(ApiFuncConsts.LOGIN)
     public JSONObject login(UserAccountBean paramBean) {
         //1.帐号密码登录
