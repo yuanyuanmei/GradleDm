@@ -11,7 +11,7 @@ import org.apache.shiro.subject.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionUtils {
+public class UserUtils {
 
     /**
      * 获得shiro自带session
