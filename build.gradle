@@ -3,6 +3,11 @@ plugins {
     id 'java'
 }
 
+allprojects {
+    group = 'com.example'
+    version = '0.0.1-SNAPSHOT'
+}
+
 subprojects{
 
     apply plugin: 'io.spring.dependency-management'
@@ -19,8 +24,7 @@ subprojects{
         }
     }
 
-    group = 'com.example'
-    version = '0.0.1-SNAPSHOT'
+
     //JVM版本要求
     sourceCompatibility = '1.8'
 
