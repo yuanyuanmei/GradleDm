@@ -1,5 +1,6 @@
 package com.example.common.base;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,13 +12,16 @@ public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Serializable id;
+    private Long id;
 
+    @JSONField
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date createTime;
 
+    @JSONField
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date updateTime;
 
+    @JSONField
     private Integer deleteStatus;
 }
