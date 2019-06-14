@@ -8,11 +8,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity<ID extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private ID id;
 
     @JSONField
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
