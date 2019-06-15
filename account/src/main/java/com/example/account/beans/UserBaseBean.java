@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class UserBaseBean extends BaseEntity {
+public class UserBaseBean extends BaseEntity<Long> {
         /**
         * 邮箱
         */

@@ -15,7 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SysRolePermissionBean extends BaseEntity {
+public class SysRolePermissionBean extends BaseEntity<Integer> {
         /**
         * 角色ID
         */

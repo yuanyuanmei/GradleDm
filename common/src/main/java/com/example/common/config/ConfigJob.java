@@ -33,7 +33,7 @@ public class ConfigJob {
 	}
 
 //	@Autowired
-//	private JobService jobService;
+//	private IJobService jobService;
 //	@Autowired
 //	private TaskExecutor taskExecutor;
 //
@@ -43,7 +43,7 @@ public class ConfigJob {
 //	@PostConstruct
 //	public void initDeleteLogsJob() {
 //		taskExecutor.execute(() -> {
-//			JobModel jobModel = new JobModel();
+//			JobDto.java jobModel = new JobDto.java();
 //			jobModel.setJobName("delete-logs-job");
 //			jobModel.setCron("0 0 0 * * ?");
 //			jobModel.setDescription("定时删除三个月前日志");

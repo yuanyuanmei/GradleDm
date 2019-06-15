@@ -15,7 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SysRoleUserBean extends BaseEntity {
+public class SysRoleUserBean extends BaseEntity<Integer> {
         /**
         * 用户ID
         */

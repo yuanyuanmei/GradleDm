@@ -1,7 +1,7 @@
-package com.example.common.redis;
+package com.example.common.dto;
 
 import com.example.common.config.ConfigJob;
-import com.example.common.service.JobService;
+import com.example.common.service.IJobService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
@@ -15,7 +15,7 @@ public class SpringBeanJob extends QuartzJobBean {
 		try {
 			ApplicationContext applicationContext = (ApplicationContext) context.getScheduler().getContext()
 					.get(ConfigJob.KEY);
-			JobService jobService = applicationContext.getBean(JobService.class);
+			IJobService jobService = applicationContext.getBean(IJobService.class);
 			jobService.doJob(context.getJobDetail().getJobDataMap());
 		} catch (SchedulerException e) {
 			e.printStackTrace();

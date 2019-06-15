@@ -19,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class UserAccountBean extends BaseEntity {
+public class UserAccountBean extends BaseEntity<Long> {
         /**
         * 账号
         */

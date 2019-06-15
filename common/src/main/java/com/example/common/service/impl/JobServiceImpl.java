@@ -1,9 +1,9 @@
 package com.example.common.service.impl;
 
 import com.example.common.dao.JobDao;
-import com.example.common.redis.JobModel;
-import com.example.common.redis.SpringBeanJob;
-import com.example.common.service.JobService;
+import com.example.common.dto.JobDto;
+import com.example.common.dto.SpringBeanJob;
+import com.example.common.service.IJobService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.aop.support.AopUtils;
@@ -18,7 +18,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class JobServiceImpl implements JobService {
+public class JobServiceImpl implements IJobService {
 
 	@Autowired
 	private Scheduler scheduler;
@@ -31,9 +31,9 @@ public class JobServiceImpl implements JobService {
 	private JobDao jobDao;
 
 	@Override
-	public void saveJob(JobModel jobModel) {
-		checkJobModel(jobModel);
-		String name = jobModel.getJobName();
+	public void saveJob(JobDto jobDto) {
+		checkJobDto(jobDto);
+		String name = jobDto.getJobName();
 		JobKey jobKey = JobKey.jobKey(name);
 		/**
 		 * JobDetail
@@ -44,13 +44,15 @@ public class JobServiceImpl implements JobService {
 		JobDetail jobDetail = JobBuilder
 									.newJob(SpringBeanJob.class)
 									.storeDurably()
-									.withDescription(jobModel.getDescription())
+									.withDescription(jobDto.getDescription())
 									.withIdentity(jobKey).build();
 
-		jobDetail.getJobDataMap().put(JOB_DATA_KEY, jobModel);
+		jobDetail.getJobDataMap().put(JOB_DATA_KEY, jobDto);
+		jobDetail.getJobDataMap().put("methodName", jobDto.getMethodName());
+		jobDetail.getJobDataMap().put("beanName", jobDto.getSpringBeanName());
 
 		//任务调度容器
-		CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(jobModel.getCron());
+		CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(jobDto.getCron());
 
 		/**
 		 * 代表一个调度参数的配置，什么时候去调。
@@ -70,20 +72,20 @@ public class JobServiceImpl implements JobService {
 				scheduler.scheduleJob(jobDetail, cronTrigger);
 			}
 
-			//JobModel model = jobDao.getByName(name);
+			//JobDto.java model = jobDao.getByName(name);
 
 //			if (model == null) {
-//				jobDao.save(jobModel);
+//				jobDao.save(JobDto);
 //			} else {
-//				jobDao.update(jobModel);
+//				jobDao.update(JobDto);
 //			}
 		} catch (SchedulerException e) {
 			log.error("新增或修改job异常", e);
 		}
 	}
 
-	private void checkJobModel(JobModel jobModel) {
-		String springBeanName = jobModel.getSpringBeanName();
+	private void checkJobDto(JobDto jobDto) {
+		String springBeanName = jobDto.getSpringBeanName();
 		boolean flag = applicationContext.containsBean(springBeanName);
 		if (!flag) {
 			throw new IllegalArgumentException("bean：" + springBeanName + "不存在，bean名如userServiceImpl,首字母小写");
@@ -95,7 +97,7 @@ public class JobServiceImpl implements JobService {
 			clazz = clazz.getSuperclass();
 		}
 
-		String methodName = jobModel.getMethodName();
+		String methodName = jobDto.getMethodName();
 		Method[] methods = clazz.getDeclaredMethods();
 
 		Set<String> names = new HashSet<>();
@@ -117,10 +119,11 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public void doJob(JobDataMap jobDataMap) {
-		JobModel jobModel = (JobModel) jobDataMap.get(JOB_DATA_KEY);
-
-		String beanName = jobModel.getSpringBeanName();
-		String methodName = jobModel.getMethodName();
+		//JobDto jobDto = (JobDto) jobDataMap.get(JOB_DATA_KEY);
+		//String beanName = jobDto.getSpringBeanName();
+		//String methodName = jobDto.getMethodName();
+		String beanName = (String) jobDataMap.get("beanName");
+		String methodName = (String) jobDataMap.get("methodName");
 		Object object = applicationContext.getBean(beanName);
 
 		try {
@@ -139,21 +142,21 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public void deleteJob(Long id) throws SchedulerException {
-		JobModel jobModel = jobDao.getById(id);
+		JobDto jobDto = jobDao.getById(id);
 
-		if (jobModel.getIsSysJob() != null && jobModel.getIsSysJob()) {
+		if (jobDto.getIsSysJob() != null && jobDto.getIsSysJob()) {
 			throw new IllegalArgumentException("该job是系统任务，不能删除，因为此job是在代码里初始化的，删除该类job请先确保相关代码已经去除");
 		}
 
-		String jobName = jobModel.getJobName();
+		String jobName = jobDto.getJobName();
 		JobKey jobKey = JobKey.jobKey(jobName);
 
 		scheduler.pauseJob(jobKey);
 		scheduler.unscheduleJob(new TriggerKey(jobName));
 		scheduler.deleteJob(jobKey);
 
-		jobModel.setStatus(0);
-		jobDao.update(jobModel);
+		jobDto.setStatus(0);
+		jobDao.update(jobDto);
 	}
 
 }

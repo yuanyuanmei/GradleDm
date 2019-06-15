@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SysRoleBean extends BaseEntity {
+public class SysRoleBean extends BaseEntity<Integer> {
         /**
         * 角色名称
         */
