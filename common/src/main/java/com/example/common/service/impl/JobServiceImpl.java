@@ -1,6 +1,6 @@
 package com.example.common.service.impl;
 
-import com.example.common.dao.JobDao;
+import com.example.common.dao.AccountJobDao;
 import com.example.common.dto.JobDto;
 import com.example.common.dto.SpringBeanJob;
 import com.example.common.service.IJobService;
@@ -28,7 +28,7 @@ public class JobServiceImpl implements IJobService {
 	private static final String JOB_DATA_KEY = "JOB_DATA_KEY";
 
 	@Autowired
-	private JobDao jobDao;
+	private AccountJobDao accountJobDao;
 
 	@Override
 	public void saveJob(JobDto jobDto) {
@@ -72,13 +72,13 @@ public class JobServiceImpl implements IJobService {
 				scheduler.scheduleJob(jobDetail, cronTrigger);
 			}
 
-			//JobDto.java model = jobDao.getByName(name);
+			JobDto model = accountJobDao.getByName(name);
 
-//			if (model == null) {
-//				jobDao.save(JobDto);
-//			} else {
-//				jobDao.update(JobDto);
-//			}
+			if (model == null) {
+				accountJobDao.insert(jobDto);
+			} else {
+				accountJobDao.update(jobDto);
+			}
 		} catch (SchedulerException e) {
 			log.error("新增或修改job异常", e);
 		}
@@ -142,7 +142,7 @@ public class JobServiceImpl implements IJobService {
 	 */
 	@Override
 	public void deleteJob(Long id) throws SchedulerException {
-		JobDto jobDto = jobDao.getById(id);
+		JobDto jobDto = accountJobDao.selectByPrimaryKey(id);
 
 		if (jobDto.getIsSysJob() != null && jobDto.getIsSysJob()) {
 			throw new IllegalArgumentException("该job是系统任务，不能删除，因为此job是在代码里初始化的，删除该类job请先确保相关代码已经去除");
@@ -156,7 +156,7 @@ public class JobServiceImpl implements IJobService {
 		scheduler.deleteJob(jobKey);
 
 		jobDto.setStatus(0);
-		jobDao.update(jobDto);
+		accountJobDao.update(jobDto);
 	}
 
 }

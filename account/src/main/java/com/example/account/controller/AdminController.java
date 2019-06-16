@@ -6,6 +6,7 @@ import com.example.common.service.IJobService;
 import com.example.common.service.IRedisTemplate;
 import com.example.common.util.RedisUtil;
 import com.example.common.util.StringUtils;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,7 @@ public class AdminController {
     @Autowired
     private IJobService jobService;
     @GetMapping("/hello")
-    public JSONObject hello(){
+    public JSONObject hello() throws SchedulerException {
         JobDto jobDto = new JobDto();
         jobDto.setId(1);
         jobDto.setCron("0/2 * * * * ?");

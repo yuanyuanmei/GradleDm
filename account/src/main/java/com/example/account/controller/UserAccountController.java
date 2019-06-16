@@ -36,9 +36,7 @@ public class UserAccountController {
         UsernamePasswordToken token = new UsernamePasswordToken(paramBean.getAccount(),paramBean.getPassword(),"");
         try {
             //执行认证操作.
-            System.out.println("AAAAAAAAAA");
             subject.login(token);
-            System.out.println("AAAAAAAAAA");
             //设置过期时间
             subject.getSession().setTimeout(2*60*60*1000);
             return StringUtils.formatSuccessJson("登录成功");
